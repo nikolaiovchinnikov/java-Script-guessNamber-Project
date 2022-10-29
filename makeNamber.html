@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        const makeNamber = {
+            multipleNamber: null,
+            userInputMinMax: "",
+            level: null,
+            cycle: true,
+            start: true,
+            userNamber: null,
+            amountInput: 0,
+            randomNamber: null,
+            getGames: function (params) {
+                if (this.level === "1") {
+                    this.start = false;
+                    this.userNamber = 100;
+                }
+            },
+            gamesOfChoice: function (params) {
+                while (this.level === null) {
+                    let inputGame = prompt("Введите уровень игры\n вы загадываете число = 1\n копьютер загадывает число = 2");
+                    if (inputGame === "1" || inputGame === "2") {
+                        this.level = inputGame;
+                    } else if (inputGame === null) {
+                        alert("Конец игры");
+                        this.cycle = false;
+                        return;
+                    } else {
+                        alert("Не верная команда");
+                    }
+                }
+            },
+            binarySearch: function (params) {
+                if (this.amountInput === 0) {
+                    this.multipleNamber = this.userNamber * 0.5;
+                    this.userNamber *= 0.5;
+                    return this.multipleNamber;
+                }
+                if (this.amountInput > 0) {
+                    this.multipleNamber = this.multipleNamber * 0.5;
+                }
+                if (this.userInputMinMax === "меньше") {
+                    return this.userNamber -= this.multipleNamber;
+                }
+                else if (this.userInputMinMax === "больше") {
+                    return this.userNamber += this.multipleNamber;
+                }
+            },
+            computerRequest: function () {
+                if (this.amountInput === 0) {
+                    alert(`Загадайте число от 1 до  ${this.userNamber}`);
+                }
+                if (confirm(`это ваше число?   ${this.binarySearch()}`)) {
+                    alert(`компьютер угадал число   ${this.amountInput}   попыток`);
+                } else {
+                    // this.userInputMinMax = ""
+                    while (true) {
+                        let userInputMinMax = prompt("больше или меньше ").toLowerCase();
+                        if (userInputMinMax === "больше" || userInputMinMax === "меньше") {
+                            this.userInputMinMax = userInputMinMax;
+                            this.amountInput++;
+                            return;
+                        } else {
+                            alert("Введите команду коректно");
+                        }
+                    }
+
+                }
+            },
+            userRequest: function () {
+                cycleFunc = true;
+                while (cycleFunc) {
+                    const userNamberStr = prompt("Введите число");
+                    const userNamberInt = parseInt(userNamberStr);
+                    if (userNamberStr === null) {
+                        alert("Вы закончили игру");
+                        this.cycle = false;
+                        return;
+                    } else if (typeof (userNamberInt) === "number" && !isNaN(userNamberInt)) {
+                        this.amountInput++;
+                        this.userNamber = userNamberInt;
+                        cycleFunc = false;
+                    }
+                    else {
+                        alert("Введите число коректно");
+                    }
+                }
+            },
+            getRandomNamber: function () {
+                this.randomNamber = Math.floor(Math.random() * (1 - 100) + 100);
+            },
+            checkNamber: function (params) {
+                if (this.userNamber === this.randomNamber) {
+                    alert(`Yes? It is!\n Вы отгодали число    ${this.randomNamber}  с   ${this.amountInput}   попыток`)
+                    if (confirm("Хотите повторить?")) {
+                        this.reset();
+                    } else {
+                        this.cycle = false;
+                    }
+                }
+                else if (this.userNamber < this.randomNamber) {
+                    alert("greater");
+                }
+                else if (this.userNamber > this.randomNamber) {
+                    alert("less");
+                }
+            },
+            reset: function (params) {
+            },
+        }
+        makeNamber.gamesOfChoice();
+        makeNamber.getGames();
+        while (makeNamber.cycle) {
+            if (makeNamber.start) {
+                makeNamber.getRandomNamber();
+                makeNamber.start = false;
+            }
+            if (makeNamber.level === "2") {
+                makeNamber.userRequest();
+                if (!makeNamber.cycle) { continue }
+                makeNamber.checkNamber();
+            }
+            if (makeNamber.level === "1") {
+                makeNamber.computerRequest();
+            }
+        }
+
+    </script>
+</body>
+
+</html>
