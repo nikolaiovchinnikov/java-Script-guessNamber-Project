@@ -19,13 +19,22 @@
             userNamber: null,
             amountInput: 0,
             randomNamber: null,
-            getGames: function (params) {
+            getGames: function () {
                 if (this.level === "1") {
                     this.start = false;
                     this.userNamber = 100;
+                    this.userInputMinMax = ""
+                    this.multipleNamber = null
+                }
+                else if(this.level === "2"){
+                    this.start = true
+                    this.userNamber = null
+                    this.amountInput = 0
+                    this.randomNamber = null
+
                 }
             },
-            gamesOfChoice: function (params) {
+            gamesOfChoice: function () {
                 while (this.level === null) {
                     let inputGame = prompt("Введите уровень игры\n вы загадываете число = 1\n копьютер загадывает число = 2");
                     if (inputGame === "1" || inputGame === "2") {
@@ -39,7 +48,7 @@
                     }
                 }
             },
-            binarySearch: function (params) {
+            binarySearch: function () {
                 if (this.amountInput === 0) {
                     this.multipleNamber = this.userNamber * 0.5;
                     this.userNamber *= 0.5;
@@ -59,10 +68,11 @@
                 if (this.amountInput === 0) {
                     alert(`Загадайте число от 1 до  ${this.userNamber}`);
                 }
-                if (confirm(`это ваше число?   ${this.binarySearch()}`)) {
-                    alert(`компьютер угадал число   ${this.amountInput}   попыток`);
+                if (confirm(`это ваше число?   ${Math.round(this.binarySearch())}`)) {
+                    alert(`компьютер угадал число с  ${this.amountInput}   попыток`);
+                    this.level = null
+                    return
                 } else {
-                    // this.userInputMinMax = ""
                     while (true) {
                         let userInputMinMax = prompt("больше или меньше ").toLowerCase();
                         if (userInputMinMax === "больше" || userInputMinMax === "меньше") {
@@ -102,7 +112,8 @@
                 if (this.userNamber === this.randomNamber) {
                     alert(`Yes? It is!\n Вы отгодали число    ${this.randomNamber}  с   ${this.amountInput}   попыток`)
                     if (confirm("Хотите повторить?")) {
-                        this.reset();
+                        this.level = null
+                        return
                     } else {
                         this.cycle = false;
                     }
@@ -114,12 +125,13 @@
                     alert("less");
                 }
             },
-            reset: function (params) {
-            },
         }
-        makeNamber.gamesOfChoice();
-        makeNamber.getGames();
+        
         while (makeNamber.cycle) {
+            if(makeNamber.level === null){
+                makeNamber.gamesOfChoice();
+                makeNamber.getGames();
+            }
             if (makeNamber.start) {
                 makeNamber.getRandomNamber();
                 makeNamber.start = false;
